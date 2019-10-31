@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        const template = document.createElement('template');
+        template.innerHTML = `
+            <style>
+                section{
+                    background:yellow;
+                    margin-top: 100px;
+                    padding-left: 50px;
+                }
+                button{
+                    margin-bottom: 25px;
+                    width: 150px;
+                    height: 350px;
+                    border: blue solid;
+                    font-size: 40pt; 
+                    color: blue; 
+                    font-weight: bold;
+                    border-radius: 60%;
+                    background-size: 50%;
+                    background-image:url('https://i.pinimg.com/originals/24/dc/c1/24dcc1d394cdf334ec1590c566421977.jpg');
+                    cursor: pointer;
+                }
+                button:hover {
+                        -webkit-transform: scaleX(-1);
+                        transform: scaleX(-1);
+                    }
+            </style>
+                <section>
+                
+                    <button>Tantz</button>
+                    
+                </section>`;
+
+        class Button extends HTMLElement {
+            constructor() {
+                super();
+                this._shadowRoot = this.attachShadow({ mode: 'open' });
+                this._shadowRoot.appendChild(template.content.cloneNode(true));
+                this.$section = this._shadowRoot.querySelector('section')
+                this.attrs = {}
+            }
+            static get observedAttributes() { return ['bg', 'color']; }
+            attributeChangedCallback(name, oldVal, newVal) {
+                console.log(`att ${name} change from ${oldVal} to ${newVal}`)
+                this.attrs[name] = newVal;
+                this.render();
+            }
+            render() {
+                let bg = this.attrs.bg;
+                this.$section.style.background = bg;
+            }
+        }
+        window.customElements.define('my-button', Button);
+    </script>
+
+
+
+</head>
+
+<body>
+    <my-button bg="green"></my-button>
+    <my-button bg="red"></my-button>
+    <my-button bg="teal"></my-button>
+    
+
+</body>
+
+</html>
